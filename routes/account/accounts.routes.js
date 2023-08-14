@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.post("/save", async (req, res) => {
   try {
-    const { email, info } = req.body;
+    const { email, info } = req.query;
     const data = await Data.find({ email });
 
     if (data.length > 0) {
