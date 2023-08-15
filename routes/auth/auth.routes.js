@@ -49,7 +49,7 @@ router.post("/signup", async (req, res) => {
     const rgp = generateRandomPassword();
     console.log({ email, mobileNumber, rgp });
     await sendOtp(
-      "gk4051668@gmail.com",
+      process.env.user,
       email,
       "Email Verification",
       `Your randomly generated password for email verificaton at alex harmozi is ${rgp}`

@@ -1,9 +1,10 @@
 const { sendGetInTouchData } = require("./../utils/email");
 
+require("dotenv").config();
 const getInTouch = async (req, res) => {
   try {
     const { budget, email, fullName, message, subject } = req.body;
-    const from = "gk4051668@gmail.com";
+    const from = process.env.user;
     const to = "Draevyn@atlasco.ai";
     const text = `
     Email: ${email}
