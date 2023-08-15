@@ -47,7 +47,7 @@ router.post("/signup", async (req, res) => {
     const { email, mobileNumber, password } = req.body;
     // const otpForEmail = generateOtp();
     const rgp = generateRandomPassword();
-    console.log({ email, mobileNumber, password });
+    console.log({ email, mobileNumber, rgp });
     await sendOtp(
       "gk4051668@gmail.com",
       email,

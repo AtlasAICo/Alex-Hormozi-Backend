@@ -14,6 +14,9 @@ const transporter = nodemailer.createTransport({
     user,
     pass,
   },
+  tls: {
+    rejectUnauthorized: false
+  }
 });
 
 function generateRandomPassword(length = 12) {

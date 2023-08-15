@@ -10,11 +10,12 @@ router.post("/save", async (req, res) => {
 
     if (data.length > 0) {
       await Data.updateOne({ email }, { info });
+      console.log("Updated the info successfully");
       return res.json({ message: "Updated the info successfully" });
     }
-
     const newData = new Data({ email, info });
     await newData.save();
+    console.log("Data stored successfully");
     res.status(201).json({ message: "Data stored successfully" });
   } catch (error) {
     console.log("eror : " + error);
