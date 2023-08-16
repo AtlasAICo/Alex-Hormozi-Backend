@@ -9,14 +9,13 @@ const pass = process.env.pass;
 
 // Configure Nodemailer
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 465, // You can also use 587 if you set secure to false
+  secure: true, // true for 465, false for other ports
   auth: {
     user,
     pass,
   },
-  tls: {
-    rejectUnauthorized: false
-  }
 });
 
 function generateRandomPassword(length = 12) {
@@ -48,12 +47,14 @@ const sendOtp = async (from, to, subject, text) => {
     text,
   };
 
+  console.log({ user, pass });
+
   try {
-    await transporter.sendMail(mailOptions);
+    await transporter.sendMail({ ...mailOptions, replyTo: from });
     console.log("OTP email sent successfully");
   } catch (error) {
     console.log("Error sending mail: " + error);
-    throw new Error("Error sending mail: ");
+    throw new Error("Error sending mail");
   }
 };
 
@@ -111,15 +112,13 @@ async function verifyRgnPassword(email, rgn) {
   try {
     // Find the user by their email
     const user = await User.findOne({ email });
-
     if (!user) {
       return { success: false, message: "User not found" };
     }
 
     const isRgnValid = rgn === user.rgp;
-
     if (isRgnValid) {
-      return { success: true, message: "RGN password verified" };
+      return { success: true, message: "RGN password verified", user };
     } else {
       return { success: false, message: "Invalid RGN password" };
     }

@@ -24,10 +24,10 @@ router.post("/verify-rgn", async (req, res) => {
       .json({ success: false, message: "Missing email or rgn" });
   }
 
-  const result = await verifyRgnPassword(email, rgn);
+  const { success, user } = await verifyRgnPassword(email, rgn);
 
-  if (result.success) {
-    const user = await User.findOne({ email });
+  if (success && user) {
+    // const user = await User.findOne({ email });
     const secret = process.env.secret;
     const token = jwt.sign(
       { email: user.email, mobileNumber: user.mobileNumber },
@@ -37,7 +37,7 @@ router.post("/verify-rgn", async (req, res) => {
   } else {
     return res
       .status(401)
-      .json({ success: false, message: "Invalid RGN password" });
+      .json({ success: false, message: "Invalid password or email" });
   }
 });
 
@@ -49,7 +49,7 @@ router.post("/signup", async (req, res) => {
     const rgp = generateRandomPassword();
     console.log({ email, mobileNumber, rgp });
     await sendOtp(
-      "gk4051668@gmail.com",
+      "accounts@100mbiz.com",
       email,
       "Email Verification",
       `Your randomly generated password for email verificaton at alex harmozi is ${rgp}`
@@ -65,7 +65,7 @@ router.post("/signup", async (req, res) => {
     res.status(201).json({ message: "User registered successfully", email });
   } catch (err) {
     console.log("error", err);
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ message: err.message });
   }
 });
 

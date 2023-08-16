@@ -5,7 +5,6 @@ const { Output } = require("../../model/Output");
 
 const router = express.Router();
 
-
 // get output
 router.get("/", async (req, res) => {
   try {
