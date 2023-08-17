@@ -332,7 +332,8 @@ const solutions = async (data) => {
 
 const grandSlamOffer = async (data) => {
   try {
-    const summary = await createSummary(data);
+    const summaryResponse = await createSummary(data);
+    const summary = summaryResponse.data.choices[0].message.content
 
     const configuration = new Configuration({
       apiKey: openAIApiKey,

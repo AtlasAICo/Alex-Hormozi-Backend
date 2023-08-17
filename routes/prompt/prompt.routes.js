@@ -303,11 +303,11 @@ router.post("/offer", async (req, res) => {
     if (!existingResult) {
       const newResult = new Output({ email, outputType, output: answer });
       await newResult.save();
-      console.log('New pain points saved to database.')
+      console.log('New offer saved to database.')
     }
     else {
       await Output.updateOne({ email, outputType }, { output: answer });
-      console.log('Pain points updated.')
+      console.log('Offer updated.')
     }
 
     res.json({
