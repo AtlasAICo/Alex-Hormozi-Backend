@@ -243,7 +243,7 @@ router.post("/solutions", async (req, res) => {
 
 router.post("/offer", async (req, res) => {
   try {
-    const outputType = 'pain-points';
+    const outputType = 'offer';
     const { email } = req.body;
 
     if (!email) {
@@ -255,12 +255,47 @@ router.post("/offer", async (req, res) => {
     const data = await Data.findOne({ email });
     if (!data) {
       return res.json({
-        message: `No data found related to this email:${email}`,
+        message: `No data found related to this email: ${email}`,
       });
     }
 
+    const clientAvatar = await Output.findOne({ email, outputType: 'client-avatar' });
+    if (!dreamOutcomes) {
+      return res.json({
+        message: `No client-avatar created yet.`,
+      });
+    }
+
+    const painPoints = await Output.findOne({ email, outputType: 'pain-points' });
+    if (!dreamOutcomes) {
+      return res.json({
+        message: `No pain-points created yet.`,
+      });
+    }
+
+    const dreamOutcomes = await Output.findOne({ email, outputType: 'dream-outcomes' });
+    if (!dreamOutcomes) {
+      return res.json({
+        message: `No dream-outcomes created yet.`,
+      });
+    }
+
+    const solutions = await Output.findOne({ email, outputType: 'solutions' });
+    if (!dreamOutcomes) {
+      return res.json({
+        message: `No solutions created yet.`,
+      });
+    }
+
+
+
     const { info } = data;
     const format_data = formatInfo(info[0]);
+    format_data.clientAvatar = clientAvatar;
+    format_data.painPoints = painPoints;
+    format_data.dreamOutcomes = dreamOutcomes;
+    format_data.solutions = solutions;
+
     const result = await grandSlamOffer(format_data);
     const answer = result.data.choices[0].message.content;
 

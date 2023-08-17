@@ -332,12 +332,14 @@ const solutions = async (data) => {
 
 const grandSlamOffer = async (data) => {
   try {
+    const summary = await createSummary(data);
+
     const configuration = new Configuration({
       apiKey: openAIApiKey,
     });
     const openai = new OpenAIApi(configuration);
-    const role = ``
-    const prompt = ``
+    const role = `You will prepare a Grand Slam Offer based on the summary of client avatar, pain points, dream outcomes and solutions.`
+    const prompt = `Summary: ${summary}`
 
     const completion = await openai.createChatCompletion({
       model: "gpt-4",
@@ -352,6 +354,29 @@ const grandSlamOffer = async (data) => {
     return error;
   }
 };
+
+const createSummary = async (data) => {
+  try {
+    const configuration = new Configuration({
+      apiKey: openAIApiKey,
+    });
+    const openai = new OpenAIApi(configuration);
+    const role = `You will be given details about Client Avatar, their pain points, their dream outcomes and list of solutions. You will create a detailed, but concise summary of all of that information. Keep the most relevant details.`
+    const prompt = `Client Avatar: ${data.clientAvatar}\n\nPain Points: ${data.painPoints}\n\nDream Outcomes: ${data.dreamOutcomes}\n\nSolutions: ${data.solutions}`
+
+    const completion = await openai.createChatCompletion({
+      model: "gpt-3.5-turbo-16k",
+      messages: [
+        { role: "system", content: role },
+        { role: "user", content: prompt },
+      ],
+    });
+    return completion;
+  } catch (error) {
+    console.log({ error });
+    return error;
+  }
+}
 
 module.exports = {
   clientAvatar,
