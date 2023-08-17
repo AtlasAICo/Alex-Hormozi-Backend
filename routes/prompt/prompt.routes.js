@@ -260,14 +260,14 @@ router.post("/offer", async (req, res) => {
     }
 
     const clientAvatar = await Output.findOne({ email, outputType: 'client-avatar' });
-    if (!dreamOutcomes) {
+    if (!clientAvatar) {
       return res.json({
         message: `No client-avatar created yet.`,
       });
     }
 
     const painPoints = await Output.findOne({ email, outputType: 'pain-points' });
-    if (!dreamOutcomes) {
+    if (!painPoints) {
       return res.json({
         message: `No pain-points created yet.`,
       });
@@ -281,7 +281,7 @@ router.post("/offer", async (req, res) => {
     }
 
     const solutions = await Output.findOne({ email, outputType: 'solutions' });
-    if (!dreamOutcomes) {
+    if (!solutions) {
       return res.json({
         message: `No solutions created yet.`,
       });
