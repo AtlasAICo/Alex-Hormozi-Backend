@@ -8,6 +8,7 @@ const {
   generateRandomPassword,
   verifyRgnPassword,
 } = require("../../utils/email");
+const { checkIfUserExist } = require("../../utils/auth");
 require("dotenv").config();
 
 const router = express.Router();
@@ -45,6 +46,12 @@ router.post("/verify-rgn", async (req, res) => {
 router.post("/signup", async (req, res) => {
   try {
     const { email, mobileNumber, password } = req.body;
+    const doesExist = await checkIfUserExist(email);
+    console.log({ doesExist });
+    if (doesExist)
+      return res.json({
+        message: "User already exists login with existing password",
+      });
     // const otpForEmail = generateOtp();
     const rgp = generateRandomPassword();
     console.log({ email, mobileNumber, rgp });

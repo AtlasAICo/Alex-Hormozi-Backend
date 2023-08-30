@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 // Define schema and model
 const dataSchema = new mongoose.Schema({
+  id: String,
   email: String,
   info: [{}],
 });

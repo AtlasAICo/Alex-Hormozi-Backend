@@ -2,7 +2,13 @@ const express = require("express");
 const router = express.Router();
 const { Data } = require("./../../model/Data");
 const { Output } = require("../../model/Output");
-const { clientAvatar, painPoints, dreamOutcomes, solutions, grandSlamOffer } = require("./../../utils/prompts");
+const {
+  clientAvatar,
+  painPoints,
+  dreamOutcomes,
+  solutions,
+  grandSlamOffer,
+} = require("./../../utils/prompts");
 
 function formatInfo(info) {
   const improvement_area =
@@ -29,9 +35,14 @@ function formatInfo(info) {
   return data;
 }
 
+router.get("/offer-time", async (req, res) => {
+  const offerEndTime = new Date("2023-08-31T24:00:00Z").getTime();
+  res.json({ offerEndTime });
+});
+
 router.post("/client-avatar", async (req, res) => {
   try {
-    const outputType = 'client-avatar';
+    const outputType = "client-avatar";
     const { email } = req.body;
 
     if (!email) {
@@ -56,11 +67,10 @@ router.post("/client-avatar", async (req, res) => {
     if (!existingResult) {
       const newResult = new Output({ email, outputType, output: answer });
       await newResult.save();
-      console.log('New client avatar saved to database.')
-    }
-    else {
+      console.log("New client avatar saved to database.");
+    } else {
       await Output.updateOne({ email, outputType }, { output: answer });
-      console.log('Client avatar updated.')
+      console.log("Client avatar updated.");
     }
 
     res.json({
@@ -78,7 +88,7 @@ router.post("/client-avatar", async (req, res) => {
 
 router.post("/pain-points", async (req, res) => {
   try {
-    const outputType = 'pain-points';
+    const outputType = "pain-points";
     const { email } = req.body;
 
     if (!email) {
@@ -94,7 +104,10 @@ router.post("/pain-points", async (req, res) => {
       });
     }
 
-    const clientAvatar = await Output.findOne({ email, outputType: 'client-avatar' });
+    const clientAvatar = await Output.findOne({
+      email,
+      outputType: "client-avatar",
+    });
     if (!clientAvatar) {
       return res.json({
         message: `No client-avatar created yet.`,
@@ -111,11 +124,10 @@ router.post("/pain-points", async (req, res) => {
     if (!existingResult) {
       const newResult = new Output({ email, outputType, output: answer });
       await newResult.save();
-      console.log('New pain points saved to database.')
-    }
-    else {
+      console.log("New pain points saved to database.");
+    } else {
       await Output.updateOne({ email, outputType }, { output: answer });
-      console.log('Pain points updated.')
+      console.log("Pain points updated.");
     }
 
     res.json({
@@ -133,7 +145,7 @@ router.post("/pain-points", async (req, res) => {
 
 router.post("/dream-outcomes", async (req, res) => {
   try {
-    const outputType = 'dream-outcomes';
+    const outputType = "dream-outcomes";
     const { email } = req.body;
 
     if (!email) {
@@ -149,7 +161,10 @@ router.post("/dream-outcomes", async (req, res) => {
       });
     }
 
-    const painPoints = await Output.findOne({ email, outputType: 'pain-points' });
+    const painPoints = await Output.findOne({
+      email,
+      outputType: "pain-points",
+    });
     if (!clientAvatar) {
       return res.json({
         message: `No pain-points created yet.`,
@@ -166,11 +181,10 @@ router.post("/dream-outcomes", async (req, res) => {
     if (!existingResult) {
       const newResult = new Output({ email, outputType, output: answer });
       await newResult.save();
-      console.log('New dream outcomes saved to database.')
-    }
-    else {
+      console.log("New dream outcomes saved to database.");
+    } else {
       await Output.updateOne({ email, outputType }, { output: answer });
-      console.log('Dream outcomes updated.')
+      console.log("Dream outcomes updated.");
     }
 
     res.json({
@@ -188,7 +202,7 @@ router.post("/dream-outcomes", async (req, res) => {
 
 router.post("/solutions", async (req, res) => {
   try {
-    const outputType = 'solutions';
+    const outputType = "solutions";
     const { email } = req.body;
 
     if (!email) {
@@ -204,7 +218,10 @@ router.post("/solutions", async (req, res) => {
       });
     }
 
-    const dreamOutcomes = await Output.findOne({ email, outputType: 'dream-outcomes' });
+    const dreamOutcomes = await Output.findOne({
+      email,
+      outputType: "dream-outcomes",
+    });
     if (!dreamOutcomes) {
       return res.json({
         message: `No dream-outcomes created yet.`,
@@ -221,11 +238,10 @@ router.post("/solutions", async (req, res) => {
     if (!existingResult) {
       const newResult = new Output({ email, outputType, output: answer });
       await newResult.save();
-      console.log('New solutions saved to database.')
-    }
-    else {
+      console.log("New solutions saved to database.");
+    } else {
       await Output.updateOne({ email, outputType }, { output: answer });
-      console.log('Solutions updated.')
+      console.log("Solutions updated.");
     }
 
     res.json({
@@ -243,7 +259,7 @@ router.post("/solutions", async (req, res) => {
 
 router.post("/offer", async (req, res) => {
   try {
-    const outputType = 'offer';
+    const outputType = "offer";
     const { email } = req.body;
 
     if (!email) {
@@ -259,35 +275,42 @@ router.post("/offer", async (req, res) => {
       });
     }
 
-    const clientAvatar = await Output.findOne({ email, outputType: 'client-avatar' });
+    const clientAvatar = await Output.findOne({
+      email,
+      outputType: "client-avatar",
+    });
     if (!clientAvatar) {
       return res.json({
         message: `No client-avatar created yet.`,
       });
     }
 
-    const painPoints = await Output.findOne({ email, outputType: 'pain-points' });
+    const painPoints = await Output.findOne({
+      email,
+      outputType: "pain-points",
+    });
     if (!painPoints) {
       return res.json({
         message: `No pain-points created yet.`,
       });
     }
 
-    const dreamOutcomes = await Output.findOne({ email, outputType: 'dream-outcomes' });
+    const dreamOutcomes = await Output.findOne({
+      email,
+      outputType: "dream-outcomes",
+    });
     if (!dreamOutcomes) {
       return res.json({
         message: `No dream-outcomes created yet.`,
       });
     }
 
-    const solutions = await Output.findOne({ email, outputType: 'solutions' });
+    const solutions = await Output.findOne({ email, outputType: "solutions" });
     if (!solutions) {
       return res.json({
         message: `No solutions created yet.`,
       });
     }
-
-
 
     const { info } = data;
     const format_data = formatInfo(info[0]);
@@ -303,11 +326,10 @@ router.post("/offer", async (req, res) => {
     if (!existingResult) {
       const newResult = new Output({ email, outputType, output: answer });
       await newResult.save();
-      console.log('New offer saved to database.')
-    }
-    else {
+      console.log("New offer saved to database.");
+    } else {
       await Output.updateOne({ email, outputType }, { output: answer });
-      console.log('Offer updated.')
+      console.log("Offer updated.");
     }
 
     res.json({

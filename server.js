@@ -5,6 +5,7 @@ const detailsRoutes = require("./routes/account/accounts.routes");
 const featureRoutes = require("./routes/prompt/prompt.routes");
 const atlasRoutes = require("./routes/atlas/atlas.routes");
 const outputsRoutes = require("./routes/outputs/outputs.routes");
+const promptRoutes = require("./routes/prompts/prompts.routes");
 const { connectDb } = require("./db/db");
 const cors = require("cors");
 require("dotenv").config();
@@ -20,7 +21,8 @@ app.use("/auth", authRoutes);
 app.use("/chats", chatRoutes);
 app.use("/feature", featureRoutes);
 app.use("/details", detailsRoutes);
-app.use("/outputs", outputsRoutes)
+app.use("/outputs", outputsRoutes);
+app.use("/prompts", promptRoutes);
 
 //Some endpoints for atlasco.ai
 app.use("/atlas", atlasRoutes);

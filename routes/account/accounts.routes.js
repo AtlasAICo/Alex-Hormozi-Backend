@@ -6,15 +6,31 @@ const router = express.Router();
 
 router.post("/save", async (req, res) => {
   try {
-    const { email, info } = req.body;
-    const data = await Data.find({ email });
-
-    if (data.length > 0) {
-      await Data.updateOne({ email }, { info });
-      console.log("Updated the info successfully");
-      return res.json({ message: "Updated the info successfully" });
+    const { email, info, id } = req.body;
+    
+    if (id) {
+      const data_2 = await Data.find({ id });
+      console.log({ data_2 });
+      if (data_2.length > 0) {
+        await Data.updateOne({ id }, { email, info });
+        console.log("Updated the info successfully");
+        return res.json({ message: "Updated the info successfully" });
+      }
     }
-    const newData = new Data({ email, info });
+
+    if (email) {
+      const data = await Data.find({ email });
+
+      if (data.length > 0) {
+        await Data.updateOne({ email }, { id, info });
+        console.log("Updated the info successfully");
+        return res.json({ message: "Updated the info successfully" });
+      }
+    }
+
+    console.log({ id, email, info });
+
+    const newData = new Data({ id, email, info });
     await newData.save();
     console.log("Data stored successfully");
     res.status(201).json({ message: "Data stored successfully" });
