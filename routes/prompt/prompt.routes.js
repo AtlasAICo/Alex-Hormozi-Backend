@@ -43,7 +43,7 @@ router.get("/offer-time", async (req, res) => {
 router.post("/client-avatar", async (req, res) => {
   try {
     const outputType = "client-avatar";
-    const { email } = req.body;
+    const { email, promptID } = req.body;
 
     if (!email) {
       return res.json({
@@ -60,7 +60,7 @@ router.post("/client-avatar", async (req, res) => {
 
     const { info } = data;
     const format_data = formatInfo(info[0]);
-    const result = await clientAvatar(format_data);
+    const result = await clientAvatar(format_data, promptID);
     const answer = result.data.choices[0].message.content;
 
     const existingResult = await Output.findOne({ email, outputType });
@@ -89,7 +89,7 @@ router.post("/client-avatar", async (req, res) => {
 router.post("/pain-points", async (req, res) => {
   try {
     const outputType = "pain-points";
-    const { email } = req.body;
+    const { email, promptID } = req.body;
 
     if (!email) {
       return res.json({
@@ -117,7 +117,7 @@ router.post("/pain-points", async (req, res) => {
     const { info } = data;
     const format_data = formatInfo(info[0]);
     format_data.clientAvatar = clientAvatar;
-    const result = await painPoints(format_data);
+    const result = await painPoints(format_data, promptID);
     const answer = result.data.choices[0].message.content;
 
     const existingResult = await Output.findOne({ email, outputType });
@@ -146,7 +146,7 @@ router.post("/pain-points", async (req, res) => {
 router.post("/dream-outcomes", async (req, res) => {
   try {
     const outputType = "dream-outcomes";
-    const { email } = req.body;
+    const { email, promptID } = req.body;
 
     if (!email) {
       return res.json({
@@ -174,7 +174,7 @@ router.post("/dream-outcomes", async (req, res) => {
     const { info } = data;
     const format_data = formatInfo(info[0]);
     format_data.painPoints = painPoints;
-    const result = await dreamOutcomes(format_data);
+    const result = await dreamOutcomes(format_data, promptID);
     const answer = result.data.choices[0].message.content;
 
     const existingResult = await Output.findOne({ email, outputType });
@@ -203,7 +203,7 @@ router.post("/dream-outcomes", async (req, res) => {
 router.post("/solutions", async (req, res) => {
   try {
     const outputType = "solutions";
-    const { email } = req.body;
+    const { email, promptID } = req.body;
 
     if (!email) {
       return res.json({
@@ -231,7 +231,7 @@ router.post("/solutions", async (req, res) => {
     const { info } = data;
     const format_data = formatInfo(info[0]);
     format_data.dreamOutcomes = dreamOutcomes;
-    const result = await solutions(format_data);
+    const result = await solutions(format_data, promptID);
     const answer = result.data.choices[0].message.content;
 
     const existingResult = await Output.findOne({ email, outputType });
@@ -260,7 +260,7 @@ router.post("/solutions", async (req, res) => {
 router.post("/offer", async (req, res) => {
   try {
     const outputType = "offer";
-    const { email } = req.body;
+    const { email, promptID } = req.body;
 
     if (!email) {
       return res.json({
@@ -319,7 +319,7 @@ router.post("/offer", async (req, res) => {
     format_data.dreamOutcomes = dreamOutcomes;
     format_data.solutions = solutions;
 
-    const result = await grandSlamOffer(format_data);
+    const result = await grandSlamOffer(format_data, promptID);
     const answer = result.data.choices[0].message.content;
 
     const existingResult = await Output.findOne({ email, outputType });
